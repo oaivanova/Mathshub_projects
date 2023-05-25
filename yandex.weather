@@ -1,0 +1,32 @@
+import telebot
+import requests
+import json
+
+api_token = '5822987809:AAHNb46fH7cnIdx2J-ucn5rLBpZ2gvTOen8'
+
+url = "https://api.weather.yandex.ru/v2/informers?lat=59.9342802&lon=30.3350986&[lang=«ru_RU»]"
+headers = {"X-Yandex-API-Key": "49f81f4f-2365-4d73-aab5-f5ff525a36d3"}
+
+bot = telebot.TeleBot(api_token)
+
+@bot.message_handler(commands=['start'])
+def get_weather(message):
+    #пишет стартовое сообщение с именем пользователя
+    bot.send_message(message.chat.id, text=f'Привет, {message.from_user.username}! \n\nЯ - погодный бот! \n\nЯ могу показать тебе текущую погоду в Санкт-Петербурге: \n/get_weather')
+
+@bot.message_handler(commands=['get_weather'])
+def get_weather(message):
+    #выдает ответ на запрос о погоде в спб
+    r = requests.get(url=url, headers=headers)
+    if r.status_code == 200:
+        data = json.loads(r.text)
+        fact = data["fact"]
+        bot.send_message(message.chat.id, \
+                         text=f'Сейчас в Санкт-Петербурге {fact["condition"]} .\
+                         \nТемпература воздуха {fact["temp"]}°, ощущается как {fact["feels_like"]}°\
+                         \nСкорость ветра {fact["wind_speed"]}м/с. Порывы до {fact["wind_gust"]}м/с.\
+                         \nВлажность воздуха - {fact["humidity"]}%.')
+    else:
+        bot.send_message(message.chat.id, 'Проблемы с АPI')
+
+bot.polling(none_stop=True)
