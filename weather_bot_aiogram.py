@@ -26,7 +26,7 @@ async def get_weather(message: types.Message):
 
         city = data["name"]
         cur_weather = data["main"]["temp"]
-        weather_description = data["weather"]["main"]
+        weather_description = data["weather"][0]["main"]
         humidity = data["main"]["humidity"]
         pressure = data["main"]["pressure"]
         wind = data["wind"]["speed"]
@@ -35,7 +35,7 @@ async def get_weather(message: types.Message):
         length_of_the_day = datetime.datetime.fromtimestamp(data["sys"]["sunset"]) - datetime.datetime.fromtimestamp(data["sys"]["sunrise"])
 
         await message.reply(f"***{datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}***\n"
-              f"Погода в городе {city} {weather_description}\nТемпература: {cur_weather}C° {wd}\n"
+              f"Погода в городе {city}: {weather_description}\nТемпература: {cur_weather:.1f}C° {wd}\n"
               f"Влажность: {humidity}%\nДавление: {pressure} мм.рт.ст\nВетер: {wind} м/с\n"
               f"Восход солнца: {sunrise_timestamp}\nЗакат солнца: {sunset_timestamp}\nПродолжительность дня: {length_of_the_day}\n"
               f"***Хорошего дня!***"
