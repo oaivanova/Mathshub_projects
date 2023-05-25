@@ -2,10 +2,10 @@ import telebot
 import requests
 import json
 
-api_token = '5822987809:AAHNb46fH7cnIdx2J-ucn5rLBpZ2gvTOen8'
+api_token = '5**********************************8'
 
 url = "https://api.weather.yandex.ru/v2/informers?lat=59.9342802&lon=30.3350986&[lang=«ru_RU»]"
-headers = {"X-Yandex-API-Key": "49f81f4f-2365-4d73-aab5-f5ff525a36d3"}
+headers = {"X-Yandex-API-Key": "4******************3"}
 
 bot = telebot.TeleBot(api_token)
 
@@ -16,7 +16,7 @@ def get_weather(message):
 
 @bot.message_handler(commands=['get_weather'])
 def get_weather(message):
-    #выдает ответ на запрос о погоде в спб
+    #отвечает на запрос о погоде в спб
     r = requests.get(url=url, headers=headers)
     if r.status_code == 200:
         data = json.loads(r.text)
